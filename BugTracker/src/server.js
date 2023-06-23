@@ -26,19 +26,20 @@ connection.connect();
 
 
 app.post('/register', function (req, res) {
- const email = req.body.email;
- const password = req.body.password;
- const isManager = req.body.isManager;
- manager = isManager ? true : false;
- connection.query('INSERT INTO user (email, password, manager) VALUES (?, ?, ?)', [email, password, manager], function (error, results, fields) {
- if (error) {
- res.status(500).send({ error: 'An error occurred while registering the user' });
- } else {
- res.send('User registered successfully!');
- }
+  const email = req.body.email;
+  const password = req.body.password;
+  const isManager = req.body.isManager;
+  manager = isManager ? true : false;
+  let stmt = 'INSERT INTO user SET ?';
+  let values = {email: email, password: password, manager: manager};
+  connection.query(stmt, values, function (error, results) {
+  if (error) {
+  res.status(500).send({ error: 'An error occurred while registering the user' });
+  } else {
+  res.send('User registered successfully!');
+  }
+  });
  });
-});
-
 
 
 
